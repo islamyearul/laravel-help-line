@@ -1,0 +1,34 @@
+composer create-project laravel/laravel multi-role-auth
+ connect db
+php artisan migrate
+composer require laravel/ui
+composer require laravel/jetstream
+php artisan jetstream:install livewire
+npm install 
+npm run dev
+php artisan migrate
+php artisan serve
+composer require spatie/laravel-permission
+ * Package Service Providers...
+         */
+        Spatie\Permission\PermissionServiceProvider::class,
+ /*
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+php artisan optimize:clear
+php artisan migrate
+in user mode 
+	use Spatie\Permission\Traits\HasRoles;
+	 	with in class = use HasRoles;
+
+
+php artisan make:seed RolePermissionSeeder
+php artisan make:seed UserSeeder
+	use Illuminate\Support\Facades\Hash;
+ 	create seeder file
+
+
+
+
+
+
+
