@@ -9,10 +9,12 @@ npm run dev
 php artisan migrate
 php artisan serve
 composer require spatie/laravel-permission
- * Package Service Providers...
-         */
-        Spatie\Permission\PermissionServiceProvider::class,
- /*
+\config/app.php file:
+'providers' => [
+    // ...
+    Spatie\Permission\PermissionServiceProvider::class,
+];
+
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 php artisan optimize:clear
 php artisan migrate
