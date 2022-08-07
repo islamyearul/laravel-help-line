@@ -27,7 +27,10 @@ php artisan make:seed RolePermissionSeeder
 php artisan make:seed UserSeeder
 	use Illuminate\Support\Facades\Hash;  in user seeder
  	create seeder file
-
+in permission migration file add this 
+ $table->string('group_name'); // For MySQL 8.0 use string('group_name', 125);
+ 
+ 
 User Sedder
 
 <?php
@@ -36,6 +39,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -68,6 +72,8 @@ RolePermission Seeder
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RolePermissionSeeder extends Seeder
 {
