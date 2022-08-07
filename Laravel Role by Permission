@@ -309,6 +309,8 @@ class DatabaseSeeder extends Seeder
 }
 
 
+php artisan migrate:refresh;
+php artisan db:seed;
 
 
 
