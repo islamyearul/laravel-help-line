@@ -63,3 +63,26 @@ Blade=======
                                         @endforeach
                                         {{ $med }}
                                     </td>
+                                    
+                                    
+  Migration
+  
+   public function up()
+    {
+        Schema::create('subscriptions', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('plan_id');
+            $table->string('tocken');
+            $table->unsignedBigInteger('somity_id')->default(0);
+            $table->unsignedBigInteger('user_id')->default(0);
+            $table->integer('is_active')->default(0);
+            $table->integer('created_user_id')->default(0);
+            $table->integer('updated_user_id')->default(0);
+            $table->timestamps();
+
+            $table->foreign('somity_id')->references('id')->on('somities');
+            $table->foreign('plan_id')->references('id')->on('subscription_plans');
+            $table->foreign('user_id')->references('id')->on('users');
+
+        });
+    }
