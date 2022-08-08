@@ -1,0 +1,52 @@
+step 1 route
+
+Route::get('locale/{lang}', function ($lacale) {
+   Session::put('locale', $lacale);
+    return redirect()->back();
+});
+
+
+step 2 controller
+
+
+    function changeLang($langcode){
+    
+        App::setLocale($langcode);
+        session()->put("lang_code",$langcode);
+        return redirect()->back();
+    } 
+    
+    
+ step 3 view
+     <div class="dropdown">
+                <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    {{ session()->has('locale') ? (session()->get('locale') == 'en' ? 'English' : 'বাংলা') : 'English' }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="locale/en">English</a>
+                    <a class="dropdown-item" href="locale/bn">বাংলা</a>
+                </div>
+        </div>
+        
+  step 4   middleware
+    public function handle($request, Closure $next)
+    {
+        if(\Session::has('locale')){
+            $lang_code = \Session::get('locale');
+            \App::setLocale($lang_code);
+        }
+        return $next($request);
+    }
+    
+  step 5 karnel
+      */
+    protected $middlewareGroups = [
+        'web' => [
+
+            \App\Http\Middleware\Language::class
+        ],
+        
+        
+    step 6 lang file
+    in resource>lang>bn/en ( file name same and field name same)

@@ -1,0 +1,323 @@
+composer create-project laravel/laravel multi-role-auth
+ connect db
+php artisan migrate
+composer require laravel/ui
+composer require laravel/jetstream
+php artisan jetstream:install livewire
+npm install 
+npm run dev
+php artisan migrate
+php artisan serve
+composer require spatie/laravel-permission
+\config/app.php file:
+'providers' => [
+    // ...
+    Spatie\Permission\PermissionServiceProvider::class,
+];
+
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+php artisan optimize:clear
+php artisan migrate
+in user model 
+	use Spatie\Permission\Traits\HasRoles;
+	 	with in class = use HasRoles;
+
+
+php artisan make:seed RolePermissionSeeder
+php artisan make:seed UserSeeder
+	use Illuminate\Support\Facades\Hash;  in user seeder
+ 	create seeder file
+in permission migration file add this 
+ $table->string('group_name'); // For MySQL 8.0 use string('group_name', 125);
+ 
+ 
+User Sedder
+
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+class UserSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $user =User::where('email', '=', 'islamyearul@gmail.com')->first();
+        if( is_null($user)){
+            $user = new User();
+            $user->name = 'Islam Yearul';
+            $user->email = 'islamyearul@gmail.com';
+            // $user->phone = 1825682260;
+            // $user->mst_somity_id = 1;
+            $user->password = Hash::make('123456');
+            $user->save();
+            $user->assignRole('app-admin');
+        }
+    }
+}
+
+
+RolePermission Seeder
+
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
+class RolePermissionSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $roleAppAdmin = Role::create([
+            'name' => 'app-admin',
+
+        ]);
+        $roleAppSomity = Role::create([
+            'name' => 'app-somity',
+        ]);
+        $roleAppEditor = Role::create([
+            'name' => 'app-editor',
+        ]);
+        $roleFieldAssistant = Role::create([
+            'name' => 'field-assistant',
+        ]);
+        $roleMangerr = Role::create([
+            'name' => 'manager',
+        ]);
+        $roleDipositor = Role::create([
+            'name' => 'dipositor',
+        ]);
+
+        $roleUser = Role::create([
+            'name' => 'user',
+        ]);
+          
+        //permission list as arry
+        
+        $permissions = [
+            [
+                'group-name' => 'app admin',
+                'permissions' => [
+                    'admin.list',
+                    'admin.create',
+                    'admin.edit',
+                    'admin.delete',
+                    'full-access',
+                ],               
+
+            ],
+            [
+                'group-name' => 'user',
+                'permissions' => [
+                    'user-list',
+                    'user-create',
+                    'user-edit',
+                    'user-delete',
+                ],               
+
+            ],
+            [
+                'group-name' => 'somity admin',
+                'permissions' => [
+                    'somity-list',
+                    'somity-create',
+                    'somity-edit',
+                    'somity-delete',
+                    'somity-full-access',
+                
+                ],               
+
+            ],
+            [
+                'group-name' => 'somity',
+                'permissions' => [
+                    'somity.list',
+                    'somity.create',
+                    'somity.edit',
+                    'somity.delete',
+                ],               
+
+            ],
+            [
+                'group-name' => 'loans',
+                'permissions' => [
+                    'loans.list',
+                    'loans.create',
+                    'loans.edit',
+                    'loans.delete',      
+                ],               
+
+            ],
+            [
+                'group-name' => 'customers',
+                'permissions' => [
+                    'customers.list',
+                    'customers.create',
+                    'customers.edit',
+                    'customers.delete',      
+                     
+                ],               
+
+            ],
+            [
+                'group-name' => 'salary',
+                'permissions' => [
+                       'salary.list',
+                        'salary.create',
+                        'salary.edit',
+                        'salary.delete',                        
+                ],               
+
+            ],
+            [
+                'group-name' => 'income & cost',
+                'permissions' => [
+                    'income-cost.list',
+                    'income-cost.create',
+                    'income-cost.edit',
+                    'income-cost.delete',                            
+                ],               
+
+            ],
+            [
+                'group-name' => 'bank',
+                'permissions' => [
+                       'bank.list',
+                        'bank.create',
+                        'bank.edit',
+                        'bank.delete',                                                       
+                ],               
+
+            ],
+            [
+                'group-name' => 'online-payment',
+                'permissions' => [
+                       'online-payment.list',
+                        'online-payment.create',
+                        'online-payment.edit',
+                        'online-payment.delete',                                                                                                            
+                ],               
+
+            ],
+            [
+                'group-name' => 'transaction',
+                'permissions' => [
+                            'transaction.list',
+                            'transaction.create',
+                            'transaction.edit',
+                            'transaction.delete',                                                                                                                                                                                                                                     
+                ],               
+
+            ],
+            [
+                'group-name' => 'club',
+                'permissions' => [
+                            'club.list',
+                            'club.create',
+                            'club.edit',
+                            'club.delete',                                                                                                                                                                                                                                     
+                ],               
+
+            ],
+            [
+                'group-name' => 'sms',
+                'permissions' => [
+                    'sms.send',
+                    'sms.inbox',
+
+                ],               
+
+            ],
+            [
+                'group-name' => 'role',
+                'permissions' => [
+                    'role-list',
+                    'role-create',
+                    'role-edit',
+                    'role-delete',
+                ],               
+
+            ],
+            [
+                'group-name' => 'permission',
+                'permissions' => [
+                    'permission-list',
+                    'permission-create',
+                    'permission-edit',
+                    'permission-delete',
+                ],               
+
+            ],
+
+
+        ];
+
+        //asign permission to role
+       for($i=0; $i < count($permissions); $i++){
+            $groupName = $permissions[$i]['group-name'];
+            
+            
+            for($y=0; $y < count($permissions[$i]['permissions']); $y++){
+
+                $permission = Permission::create([ 'name' => $permissions[$i]['permissions'][$y],'group_name' => $groupName ]);
+                $roleAppAdmin->givePermissionTo($permission);
+                $permission -> assignRole($roleAppAdmin);
+
+            }           
+
+        }   
+        
+    }
+}
+
+
+Database Seeder
+
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\RolePermissionSeeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        // \App\Models\User::factory(10)->create();
+        $this->call(RolePermissionSeeder::class);
+        $this->call(UserSeeder::class);
+
+
+    }
+}
+
+
+php artisan migrate:refresh;
+php artisan db:seed;
+
+
+
+

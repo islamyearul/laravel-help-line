@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Models\backend;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Prescription extends Model
+{
+    use HasFactory;
+  protected $fillable = ['prescription_code','prescription_p_id','prescription_doc_id', 'prescription_history','prescription_note','prescription_date'];
+  
+  public function doctor()
+  {
+      return $this->belongsTo(Doctors::class,'prescription_doc_id', 'id');
+  }
+
+  public function PressMedicine()
+    {
+       return $this->hasMany(Prescription_Medicines::class);
+    }
+
+  public function Presstest()
+    {
+       return $this->hasMany(PrescriptionTest::class);
+    }
+
+ public function inpatient()
+  {
+      return $this->belongsTo(InPatient::class, 'prescription_p_id', 'id');
+  }
+
+  public function outpatient()
+  {
+      return $this->belongsTo(OutPatient::class, 'prescription_p_id', 'id');
+  }
+  // public function medicines()
+  //   {
+  //       return $this->belongsToMany(Medicine::class)->using(Prescription_Medicines::class);
+  //   }
+}
+
+
+Blade=======
+ <td>
+                                        @if ($Prescription->prescription_patient_type == 'inpatient')
+                                            {{$Prescription['inpatient']['in_p_name']}}
+                                        @elseif($Prescription->prescription_patient_type == 'outpatient')
+                                            {{$Prescription['outpatient']['out_p_name']}}
+                                            
+                                        @endif
+                                       
+                                    </td>
+                                    <td> {{ $Prescription['doctor']['doc_name'] }}</td>
+                                    <td>
+                                        @php
+                                            $med = '';
+                                        @endphp
+                                        @foreach ($Prescription['PressMedicine'] as $item)
+                                            @php
+                                                $med .= $item['medicine']['name'] . ', ';
+                                            @endphp
+                                        @endforeach
+                                        {{ $med }}
+                                    </td>

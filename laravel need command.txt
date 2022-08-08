@@ -72,6 +72,10 @@ use Illuminate\Support\Str;
 ======================
 Image Upload
  <img src="{{ asset('storage/images/Students'). '/' . $Student->photo }}" alt="" style="width: 80px">
+ 
+ ============
+ php artisan db:wipe   delete all table 
+ php artisan migrate:refresh   refresh all table
 
 
 
