@@ -1,0 +1,24 @@
+<td>
+ <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebab"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <span class="fa fa-ellipsis-v"></span>
+                                            </button>
+
+                                            <ul class="dropdown-menu px-2 py-2" style="min-width: 3rem;"
+                                                aria-labelledby="dropdownKebab">
+
+                                                <li><a href="{{ route('admin-user.edit', $User->id) }}"
+                                                        class="btn btn-primary m-1"><i class="fas fa-edit"></i></a>
+                                                </li>
+                                                <li>
+                                                    <form action="{{ route('admin-user.destroy', $User->id) }}"
+                                                        method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="btn btn-danger bg-danger show_confirm m-1"><i
+                                                                class="far fa-trash-alt "></i></button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </td>
