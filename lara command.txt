@@ -1,0 +1,7 @@
+
+composer create-project laravel/laravel example-app
+composer create-project --prefer-dist laravel/laravel test "8.*"
+composer create-project --prefer-dist laravel/laravel:8 active
+
+composer require laravel/jetstream
+php artisan jetstream:install livewire
