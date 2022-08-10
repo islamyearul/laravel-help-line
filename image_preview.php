@@ -1,3 +1,6 @@
+<img src="{{ asset('/storage/' . auth()->user()->profile_photo_path) }}" class="user-image rounded-circle" alt="{{auth()->user()->name}}" />
+
+
 
 <!-- Single Image -->
 
