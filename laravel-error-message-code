@@ -22,3 +22,6 @@ FOrm Field Error
 @error('title')
     <div class="alert alert-danger">{{ $message }}</div>
 @enderror
+ @error('bank_name')
+   <small class="alert alert-danger">{{ $message }}</small>  
+@enderror
