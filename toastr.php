@@ -12,7 +12,7 @@
     <script>
         @if (Session::has('message'))
 
-            var type = ("{{ Session::get('type') }}");
+            var type = ("{{ Session::get('alert-type') }}");
 
             var message = ("{{ Session::get('message') }}");
             switch (type) {
@@ -33,15 +33,11 @@
         @endif
     </script>
 
+$notification = array(
+    'message' => 'Post created successfully!',
+    'alert-type' => 'success'
+);
 
-return redirect()->route('your route name')->with('message','Data added Successfully');
-
-return redirect()->route('your route name')->with('error','Data Deleted');
-
-return redirect()->route('your route name')->with('Warning','Are you sure you want to delete? ');
-
-return redirect()->route('your route name')->with('info','This is xyz information');
-
-
+return Redirect::to('/')->with($notification);
 
 
