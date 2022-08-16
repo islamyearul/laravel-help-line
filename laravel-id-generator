@@ -1,0 +1,9 @@
+composer require haruncpi/laravel-id-generator
+use Haruncpi\LaravelIdGenerator\IdGenerator;  
+public static function boot()
+	{
+	    parent::boot();
+	    static::saving(function ($model) {
+	        $model->out_p_id = IdGenerator::generate(['table' => 'out_patients', 'field'=>'out_p_id', 'length' => 10, 'prefix' => 'OUT-PAT-']);
+	    });
+	}
