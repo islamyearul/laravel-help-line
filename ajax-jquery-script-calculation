@@ -1,0 +1,136 @@
+ {{-- Medicine name Change and Pick value --}}
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $(document).ready(function() {
+            $('.addMedicineName').on('change', function(e) {
+                var Medicine_id = e.target.value;
+                $.ajax({
+                    url: "{{ url('/admin/mediprice') }}" + '/' + Medicine_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $.each(data, function(key, value) {
+                            //alert(value.id)
+                            $('.medicine_bp').empty();
+                            $('.medicine_quantity').empty();
+                            $('.medicine_price').empty();
+                            $('.medicine_total').empty();
+                            $('.medicine_bp').val(value.mg);
+                            var Bp = $('.medicine_bp').val();
+                            $('.medicine_price').val(value.price);
+                            var Price = $('.medicine_price').val();
+                            var Quantity = $('.medicine_quantity').val();
+                            var total = Price * Quantity
+                            $('.medicine_total').val(total);
+                            $('.medicine_quantity').on('change keypress keyup',
+                                function() {
+                                    var Price = $('.medicine_price').val();
+                                    var Quantity = $('.medicine_quantity').val();
+                                    var total = Price * Quantity
+                                    $('.medicine_total').val(total);
+                                });
+                            $('.medicine_price').on('change keypress keyup',
+                                function() {
+                                    var Price = $('.medicine_price').val();
+                                    var Quantity = $('.medicine_quantity').val();
+                                    var total = Price * Quantity
+                                    $('.medicine_total').val(total);
+                                });
+                        });
+                    }
+                })
+            });
+        });
+    </script>
+
+    {{-- Add Modal Close and Show --}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#showaddModal').on('click', function() {
+                $('#addmedicineModal').modal('show');
+            });
+            $('.closeModal').on('click', function() {
+                $('#addmedicineModal').modal('hide');
+            });
+            $('#addmedicineModal').on('hidden.bs.modal', function () {
+            $(this).find('form').trigger('reset'); 
+            var inputs = document.getElementsByClassName( 'med_invoice_total' );
+            var Total = 0;
+            for (let i = 0; i < inputs.length; i++) {       
+                Total += parseInt(inputs[i].value);
+                }
+                $('#med_invoice_total_ammount').val(Total);
+                $('#med_invoice_total_medicine').val(inputs.length);
+                $('.med_invoice_medicine_total').val(Total);
+            })
+        });
+    </script>
+
+    {{-- Add Modal value Store  add remove--}}
+    <script type="text/javascript">
+     $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $(document).ready(function() {
+            $('#addInvoiceMedicine').on('click', function(e) {
+                var Med_id = $('#addMedicineName').val();
+                $.ajax({
+                    url: "{{ url('/admin/medname') }}" + '/' + Med_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $.each(data, function(key, value) {
+                            var Med_name = value.name;
+                            var Med_id = value.id;
+                            var Bp = $('.medicine_bp').val();
+                            var Price = $('.medicine_price').val();
+                            var Quantity = $('.medicine_quantity').val();
+                            var Total = $('.medicine_total').val();
+                            //alert(Total)
+                            $("#MedicineAppend").append("<tr class='form-froup'><td><input type='hidden' value='"+Med_id +"' name='med_invoice_medicine_id[]' class='med_invoice_medicine_id '><input type='text' value='"+Med_name +"' name='med_invoice_medicine[]' class='med_invoice_medicine form-control' readonly></td><td><input type='number' value='"+Bp +"' name='med_invoice_bp[]' class='med_invoice_bp form-control' readonly></td><td><input type='number' value='"+Quantity +"' name='med_invoice_medicine_quantity[]' class='med_invoice_medicine_quantity form-control' readonly></td><td><input type='number' value='"+Price +"' name='med_invoice_medicine_price[]' class='med_invoice_medicine_price form-control' readonly></td><td><input type='number' value='"+Total +"' name='med_invoice_total[]' class='med_invoice_total form-control' readonly></td><td><button class='btn btn-danger btn-sm remove_field' style='margin-left: 8px;'><i class='fa fa-trash'></i></button></td></tr>");
+                            $('#addmedicineModal').modal('hide');
+                        });
+                    }
+                })
+            });
+            $('#medTable').on("click", ".remove_field", function(e) {
+                e.preventDefault();
+                if( $(this).closest('tr').remove()){
+                    var inputs = document.getElementsByClassName( 'med_invoice_total' );
+                    var Total = 0;
+                    for (let i = 0; i < inputs.length; i++) {       
+                    Total += parseInt(inputs[i].value);
+                     }
+                     $('#med_invoice_total_ammount').val(Total);
+                     $('#med_invoice_total_medicine').val(inputs.length);
+                     $('.med_invoice_medicine_total').val(Total);
+                }
+             
+            });
+        });
+    </script>
+
+    {{-- Discount --}}
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $(document).ready(function() {
+            $('#med_invoice_medicine_discount').on('keypress change keydown keyup', function() {
+                var DiscountPe =  $('#med_invoice_medicine_discount').val();
+                var DiscountPercent =  parseInt(DiscountPe);
+                var Total =  $('#med_invoice_total_ammount').val();
+                var discountTaka = parseInt(Total) * (DiscountPercent / 100);
+                $('.med_invoice_medicine_discount_taka').val(Math.round(discountTaka));
+                $('.med_invoice_medicine_total').val(Math.round(Total - discountTaka));
+            });
+        });
+    </script>
