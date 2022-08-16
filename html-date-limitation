@@ -1,0 +1,2 @@
+<input type="date" class="form-control" name="order_date" id="order_date"
+                                        value="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y-m-d'); ?>">
