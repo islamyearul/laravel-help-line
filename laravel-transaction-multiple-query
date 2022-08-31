@@ -1,0 +1,113 @@
+ public function store(Request $request)
+    {
+        $this->authorize('loans.create');
+
+        $this->validate($request, [
+            'loan_id'  => 'required|numeric',
+            'received_by'  => 'required|string|max:100',
+            'received_amount'  => 'required|numeric',
+            'deposit'  => 'nullable|numeric',
+            'deposit_1'  => 'numeric|nullable',
+            'installments'  => 'required|numeric',
+            'date'  => 'required|date',
+            'total_amount'  => 'required|numeric',
+          ]);
+
+          try {
+            
+            DB::beginTransaction();
+
+
+        $loan = new Loan();
+        $loan->loan_id = $request->loan_id;
+        $loan->received_by = $request->received_by;
+        $loan->received_amount = $request->received_amount;
+        $loan->deposit = $request->deposit;
+        $loan->deposit_1 = $request->deposit_1;
+        $loan->installments = $request->installments;
+        $loan->date = $request->date;
+        $loan->Txn = Str::random(10);
+        $loan->total_amount = $request->total_amount;
+        $loan->somity_id = auth()->user()->mst_somity_id;
+        $loan->is_active = 1;
+        $created_user_id = auth()->user()->id;
+        $loan->save();
+            $AssignLoan = AssignLoan::find($request->loan_id);
+            $AssignLoan->deposit += $request->deposit;
+            $AssignLoan->deposit_1 += $request->deposit_1;
+            $AssignLoan->paid_amount += $request->received_amount;
+            $AssignLoan->remaining_amount =  $AssignLoan->total_amount - $request->received_amount;
+            $AssignLoan->update();            
+                // TransactionReport 
+                $TransactionReport = new TransactionReport();
+                $TransactionReport->transaction_type = 'loan_received';
+                $TransactionReport->customer_id  = $loan['assignloan']['customer_id'];
+                $TransactionReport->transaction_description = 'loan received with deposit';
+                $TransactionReport->transaction_method = 'cash';
+                $TransactionReport->transaction_amount =  $request->total_amount;
+                $TransactionReport->transaction_date = $request->date;
+                $TransactionReport->transaction_time = date('H:i:s');
+                $TransactionReport->transaction_by = $request->received_by;
+                $TransactionReport->somity_id = auth()->user()->mst_somity_id;
+                $TransactionReport->created_user_id = auth()->user()->id;
+                $TransactionReport->is_loan_diposite = $loan->id;
+                $TransactionReport->Txn =  $loan->Txn;
+                $TransactionReport->save();
+                DB::commit();
+                $success = true;
+          
+
+        
+        }
+        catch (\Exception $e)
+        {
+                DB::rollBack();
+                $success = false;
+        }
+           
+        if($success){
+              //sms info
+              $AdminSeetings = AdminSeetings::where('somity_id', auth()->user()->mst_somity_id)->first();
+              if($AdminSeetings->automatic_sms == 1){
+               $SmsPackageAssignToSomity = SmsPackageAssignToSomity::where('somity_id', auth()->user()->mst_somity_id)->first();
+               // $SmsPackage = SmsPackage::find($SmsPackageAssignToSomity->sms_package_id);
+                   if($SmsPackageAssignToSomity->remaining_sms > 0){
+                       // $Remaining_sms = $SmsPackage->remaining_sms;
+                       $customer_number = $AssignLoan['customer']['customer_phone']; 
+                       $loan_id = $AssignLoan->loan_number;
+                       $loan_amount =  $request->received_amount;
+                       $remaining_amount =  $AssignLoan->remaining_amount;
+                       $message = "Your loan No: ". $loan_id . ". received amount: ".  $loan_amount ." Tk. Remaining Balance: ". $remaining_amount ." Tk.";
+                       //  dd($message);
+                       $SmsPackageAssignToSomity->remaining_sms = $SmsPackageAssignToSomity->remaining_sms - 1;
+                       $SmsPackageAssignToSomity->use_sms = $SmsPackageAssignToSomity->use_sms + 1;
+
+                       $SmsPackageAssignToSomity->save();
+                      
+                       $url =   "https://bulksms.aloitltd.com/services/send.php?key=".env('API_KEY')."&number=" . $customer_number . "&message=". $message . "&option=".env('OPTION')."&type=".env('TYPE')."&prioritize=".env('PRIORITIZE');
+                       return Redirect::to($url);
+                   } else{
+                       $notification = array(
+                           'message' => 'Loan Added Successfully and SMS LIMIT EXCEED',
+                           'alert-type' => 'success'
+                       );
+                       return redirect()->route('loan.index')->with($notification);    
+                   }
+               
+           } else {
+               $notification = array(
+                   'message' => 'Loan Added Successfully',
+                   'alert-type' => 'success'
+               );
+               return redirect()->route('loan.index')->with($notification);    
+               // return Redirect::to($url);
+           }
+        } else{
+            $notification = array(
+                'message' => 'Loan Not Added',
+                'alert-type' => 'error'
+            );
+            return redirect()->route('loan.index')->with($notification);    
+        }
+       
+    }
