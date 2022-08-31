@@ -1,0 +1,2 @@
+Date Formate---
+{{ date('d-m-Y', strtotime($TransactionReport->transaction_date));}}
