@@ -36,4 +36,27 @@ $multi_images = $request->file('multi_images');
             ]);
 
         }
+
+//Update Image
+
+  if(isset($input['somity_logo'])){
+            $oldFile = $somity->somity_logo;
+            if($oldFile){
+                \Storage::delete($oldFile);
+            }
+            $image = $request->file('somity_logo');
+            $imageName = $image->getClientOriginalName();
+            $image->move(public_path('images/somity_logo'), $imageName);
+            $path = 'images/somity_logo/'.$imageName;
+            $somity->somity_logo = $path;
+        } else {
+            $image = $request->file('somity_logo');
+            $imageName = $image->getClientOriginalName();
+            $image->move(public_path('images/somity_logo'), $imageName);
+            $path = 'images/somity_logo/'.$imageName;
+            $somity->somity_logo = $path;
+        }
+
+
+
  ?>
