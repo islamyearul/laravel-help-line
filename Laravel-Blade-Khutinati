@@ -1,2 +1,5 @@
 Date Formate---
 {{ date('d-m-Y', strtotime($TransactionReport->transaction_date));}}
+
+Long text in Short {{ Str::limit($your_string, 50) }}
+</p>
