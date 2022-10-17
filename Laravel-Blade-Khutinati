@@ -1,5 +1,11 @@
 Date Formate---
 {{ date('d-m-Y', strtotime($TransactionReport->transaction_date));}}
+  @php                
+                        $time = strtotime($SomityPost->datet);
+                        $month = date('M', $time);
+                        $date = date('d', $time);
+                        $year = date('Y', $time);
+ @endphp
 
 Long text in Short {{ Str::limit($your_string, 50) }}
 </p>
