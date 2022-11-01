@@ -9,3 +9,6 @@ Date Formate---
 
 Long text in Short {{ Str::limit($your_string, 50) }}
 </p>
+
+
+Get current Year in Blade  {{ now()->year }}
