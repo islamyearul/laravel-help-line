@@ -12,3 +12,5 @@ Long text in Short {{ Str::limit($your_string, 50) }}
 
 
 Get current Year in Blade  {{ now()->year }}
+
+Dicimal Formate {{ number_format($Expense->price, 2) }}
