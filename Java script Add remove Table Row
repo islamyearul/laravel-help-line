@@ -92,3 +92,52 @@
             });
         });
 </script>
+
+// 2nd way only tr create
+
+<table class="table input_field">
+                                                <tr>
+                                                    <input type="hidden" name="row_no" id="row_no" value="1">
+                                                    <td style='width:50%'>
+                                                        <input type='text' name='items[]' class='form-control' placeholder="Items">
+                                                    </td>
+                                                    <td>
+                                                        <input type='number' name='price[]' class='form-control number_field' placeholder="Price">
+                                                    </td>
+                                                    <td>
+                                                        <button class='btn btn-success btn-sm add_field' type="button"><i class="fa fa-plus-square"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+{{-- Java script Add remove Table Row --}}
+   <script type="text/javascript">
+    $(document).ready(function() {
+        var max_field = 10;
+        var wrapper = $(".input_field");
+        var add_field = $(".add_field");
+        var i = 1;
+        $(add_field).click(function(e) {
+            e.preventDefault();
+            if (i < max_field) {
+                i++;
+                $("#row_no").val(i);
+                $(wrapper).append("<tr>\
+                                       <td style='width:50%'>\
+                                               <input type='text' name='items[]' class='form-control' placeholder='Items'>\
+                                        </td>\
+                                        <td>\
+                                                <input type='number' name='price[]' class='form-control number_field' placeholder='Price'>\
+                                        </td>\
+                                        <td>\
+                                                <button class='btn btn-danger btn-sm remove_field'><i class='fa fa-trash'></i></button>\
+                                        </td>\
+                                    </tr>");
+            }
+        });
+        $(wrapper).on("click", ".remove_field", function(e) {
+            e.preventDefault();
+            $(this).closest('tr').remove();
+            i--;
+        });
+    });
+    </script>
