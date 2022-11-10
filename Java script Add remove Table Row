@@ -1,0 +1,93 @@
+// Html Code
+
+<div class="row xdisplay_inputx form-group ro">
+                                <label>
+                                    <h4>Medicine</h4>
+                                </label>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <select class='form-control' name="medicine[]" style='width: 170px;'>
+                                                <option selected hidden disabled>--Select Medicine--</option>
+                                                @foreach ($Medicines as $Medicine)
+                                                    <option value='{{ $Medicine->id }}'>{{ $Medicine->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <input type="hidden" name="row_no" id="row_no" value="1">
+                                        <td>
+                                            <input type='text' name='dosage[]' class='form-control'
+                                                style='margin-left: 9px; width: 170px;' placeholder="100mg">
+                                        </td>
+                                        <td>
+                                            <input type='text' name='frequency[]' class='form-control'
+                                                style='margin-left: 9px; width: 170px;' placeholder="1+0+1">
+                                        </td>
+                                        <td>
+                                            <input type='text' name='days[]' class='form-control'
+                                                style='margin-left: 9px; width: 170px;' placeholder="7days">
+                                        </td>
+                                        <td>
+                                            <input type='text' name='instruction[]' class='form-control'
+                                                style='margin-left: 9px; width: 170px;' placeholder="After Food">
+                                        </td>
+                                        <td>
+                                            <button class='btn btn-success btn-sm add_field' type="button"
+                                                style='margin-left: 8px;'><i class="fa fa-plus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="input_field"></div>
+                            </div>
+                            
+                            
+ // JS Code 
+ 
+ {{-- Java script Add remove Table Row --}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var max_field = 10;
+            var wrapper = $(".input_field");
+            var add_field = $(".add_field");
+            var i = 1;
+            $(add_field).click(function(e) {
+                e.preventDefault();
+                if (i < max_field) {
+                    i++;
+                    $("#row_no").val(i);
+                    $(wrapper).append("<div>\
+                              <table>\
+                                              <tr>\
+                                                  <td>\
+                                                    <select class='form-control' name='medicine[]' style='width: 170px;'>\
+                                                      <option selected hidden disabled>Select</option>\
+                                                      @foreach ($Medicines as $Medicine)\
+                                                          <option value='{{ $Medicine->id }}'>{{ $Medicine->name }}</option>\
+                                                      @endforeach\
+                                                    </select>\
+                                                  </td>\
+                                                  <td>\
+                                                    <input type='text' name='dosage[]' class='form-control' style='margin-left: 9px; width:170px;' placeholder='100mg'>\
+                                                  </td>\
+                                                  <td>\
+                                                    <input type='text' name='frequency[]' class='form-control' style='margin-left: 9px; width:170px;' placeholder='1+0+1'>\
+                                                  </td>\
+                                                  <td>\
+                                                    <input type='text' name='days[]' class='form-control' style='margin-left: 9px; width: 170px;' placeholder='7days'>\
+                                                  </td>\
+                                                  <td>\
+                                                    <input type='text' name='instruction[]' class='form-control' style='margin-left: 9px; width: 170px;' placeholder='After Food'>\
+                                                  </td>\
+                                                  <td>\
+                                                    <button class='btn btn-danger btn-sm remove_field' style='margin-left: 8px;'><i class='fa fa-trash'></i></button>\
+                                                  </td>\
+                                              </tr>\
+                                            </table>\</div>");
+                }
+            });
+            $(wrapper).on("click", ".remove_field", function(e) {
+                e.preventDefault();
+                $(this).closest('div').remove();
+                i--;
+            });
+        });
