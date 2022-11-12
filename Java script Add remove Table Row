@@ -142,10 +142,4 @@
     });
     </script>
     
-    
-    // value Calculation ( Dianamically add row value and delete row remove value from total)
-    
-    // table 
-    <table class="table input_field" id="calculation">
-                                                   </tr>
-          </table>
+   
