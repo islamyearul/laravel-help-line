@@ -89,6 +89,7 @@
                 e.preventDefault();
                 $(this).closest('div').remove();
                 i--;
+                $("#row_no").val(i);
             });
         });
 </script>
