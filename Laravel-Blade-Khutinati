@@ -32,3 +32,6 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 ===========
+
+Form old value 
+value="{{old('name')}}"
