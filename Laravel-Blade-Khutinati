@@ -35,3 +35,7 @@ input[type=number] {
 
 Form old value 
 value="{{old('name')}}"
+
+=====
+require Icon 
+<sup><span class="require_icon"><i class="bi bi-asterisk"></i></span></sup>
