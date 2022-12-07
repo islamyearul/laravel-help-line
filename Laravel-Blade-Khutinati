@@ -32,7 +32,18 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 ===========
+Status button in Table
 
+<td>
+   @if ($Bank->is_active == 1)
+      <span class="badge badge-success py-1">@lang('form.Active')</span>
+       @else
+   <span class="badge badge-danger py-1">@lang('form.Inactive')</span>
+ @endif
+ </td>
+ 
+ ==================
+ 
 Form old value 
 value="{{old('name')}}"
 
