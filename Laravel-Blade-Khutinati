@@ -50,3 +50,7 @@ value="{{old('name')}}"
 =====
 require Icon 
 <sup><span class="require_icon"><i class="bi bi-asterisk"></i></span></sup>
+
+==============================
+Show active menu 
+{{ Route::is('order.index') || Route::is('order.create') || Route::is('order.edit') ? 'active' : '' }}
