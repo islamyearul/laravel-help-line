@@ -3,8 +3,9 @@ Date Formate---
   @php                
                         $time = strtotime($SomityPost->datet);
                         $month = date('M', $time);
-                        $date = date('d', $time);
+                        $date = date('d', $time);   // get day as 1 to 31
                         $year = date('Y', $time);
+                        $day = date('l', strtotime($request->date)); //Thursday
  @endphp
 
 Long text in Short {{ Str::limit($your_string, 50) }}
