@@ -21,8 +21,15 @@ php artisan migrate
 in user model 
 	use Spatie\Permission\Traits\HasRoles;
 	 	with in class = use HasRoles;
-
-
+==================
+in Karnel routesmiddlewares  add this
+protected $routeMiddleware = [
+    // ...
+    'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+    'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+    'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+];
+========================
 php artisan make:seed RolePermissionSeeder
 php artisan make:seed UserSeeder
 	use Illuminate\Support\Facades\Hash;  in user seeder
@@ -30,7 +37,7 @@ php artisan make:seed UserSeeder
 in permission migration file add this 
  $table->string('group_name'); // For MySQL 8.0 use string('group_name', 125);
  
- 
+======================= 
 User Sedder
 
 <?php
@@ -64,7 +71,7 @@ class UserSeeder extends Seeder
     }
 }
 
-
+===============================
 RolePermission Seeder
 
 <?php
@@ -286,7 +293,7 @@ class RolePermissionSeeder extends Seeder
     }
 }
 
-
+==========================
 Database Seeder
 
 <?php
