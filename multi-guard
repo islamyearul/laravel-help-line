@@ -122,6 +122,8 @@ public function login(Request $request)
 }
 
 Step 7: Redirecting Unauthenticated Admin To Login Page.   app/Exceptions/Handler.php
+add this use Illuminate\Auth\AuthenticationException;
+
 protected function unauthenticated($request, AuthenticationException $exception)
 {
    if ($request->expectsJson()) {
