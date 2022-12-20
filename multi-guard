@@ -1,0 +1,200 @@
+Step 1: Update the config/auth.php with the below code  config.php
+guard===
+'admin' => [
+     'driver' => 'session',
+     'provider' => 'admins',
+],
+
+providers===
+'admins' => [
+    'driver' => 'eloquent',
+    'model' => App\Models\Admin::class,
+ ],
+ 
+ passwords===
+ 'admins' => [
+    'provider' => 'users',
+    'table' => 'password_resets',
+    'expire' => 60,
+   ],
+   
+Step 2: Adding Admin Auth Routes.
+
+admin.php
+
+Route::group(['prefix' => 'admin'], function () {
+
+   Route::get('login', ''App\Http\Controllers\Admin\LoginController@showLoginForm')->name('admin.login');
+   Route::post('login', ''App\Http\Controllers\Admin\LoginController@login')->name('admin.login.post');
+   Route::get('logout', ''App\Http\Controllers\Admin\LoginController@logout')->name('admin.logout');
+
+   Route::get('/', function () {
+      return view('admin.dashboard.index');
+   });
+
+});
+
+in web route ===
+require 'admin.php';
+
+step 3 = Creating Admin Auth Controller
+
+namespace App\Http\Controllers\Admin;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr; 
+use App\Http\Controllers\Controller;
+use Illuminate\Auth\AuthenticationException; 
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+
+class LoginController extends Controller
+{
+    use AuthenticatesUsers;
+
+   /**
+   * Where to redirect admins after login.
+   *
+   * @var string
+   */
+   protected $redirectTo = '/admin';
+
+   /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
+   public function __construct()
+   {
+   $this->middleware('guest:admin')->except('logout');
+   }
+
+   /**
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+   */
+   public function showLoginForm()
+   {
+   return view('admin.auth.login');
+   }
+}
+
+Step 4: Creating Admin Login Page.
+
+Step 5: Adding Admin Login Functionality. in controller
+public function login(Request $request)
+    {
+        $this->validate($request, [
+            'email'   => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+        if (Auth::guard('admin')->attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ], $request->get('remember'))) {
+            return redirect()->intended(route('admin.dashboard'));
+        }
+        return back()->withInput($request->only('email', 'remember'));
+    }
+    
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        return redirect()->route('admin.login');
+    }
+  
+ Step 6: Redirecting Authenticated Admin To Dashboard Page.  app/Http/Middleware/Redirecifauthenticated.php
+ 
+ public function handle($request, Closure $next, $guard = null)
+{
+    switch($guard){
+    case 'admin':
+    if (Auth::guard($guard)->check()) {
+      return redirect('/admin');
+    }
+    break;
+    default:
+    if (Auth::guard($guard)->check()) {
+      return redirect('/');
+    }
+    break;
+    }
+    return $next($request);
+}
+
+Step 7: Redirecting Unauthenticated Admin To Login Page.   app/Exceptions/Handler.php
+protected function unauthenticated($request, AuthenticationException $exception)
+{
+   if ($request->expectsJson()) {
+      return response()->json(['message' => $exception->getMessage()], 401);
+}
+   $guard = Arr::get($exception->guards(), 0);
+   switch($guard){
+   case 'admin':
+   $login = 'admin.login';
+   break;
+   default:
+   $login = 'login';
+   break;
+}
+    return redirect()->guest(route($login));
+}
+
+Step 8: Update the admin.php 
+
+
+Route::group(['middleware' => ['auth:admin']], function () {
+
+    Route::get('/', function () {
+        return view('admin.dashboard.index');
+    })->name('admin.dashboard');
+
+});
+Step 9: Create Admins Table
+
+     Schema::create('admins', function (Blueprint $table) {
+     $table->bigIncrements('id');
+     $table->string('name');
+     $table->string('email')->unique();
+     $table->timestamp('email_verified_at')->nullable();
+     $table->string('password');
+     $table->rememberToken();
+     $table->timestamps();
+Step 10: Update the Model Admin.php
+
+namespace App\Models;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class Admin extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+    protected $fillable = [
+    'name', 'email', 'password',
+    ];
+
+    /**
+    * The attributes that should be hidden for arrays.
+    *
+    * @var array
+    */
+    protected $hidden = [
+   'password', 'remember_token',
+   ];
+
+   /**
+   * The attributes that should be cast to native types.
+   *
+   * @var array
+   */
+   protected $casts = [
+   'email_verified_at' => 'datetime',
+   ];
+   }
