@@ -8,7 +8,7 @@ Date Formate---
                         $year = date('Y', $time);
                         $day = date('l', strtotime($request->date)); //Thursday
  @endphp
-
+{{date("l jS \of F Y h:i:s A")}}
 Long text in Short {{ Str::limit($your_string, 50) }}
 </p>
 
