@@ -1,0 +1,8 @@
+
+npm init //for package.json
+
+npm i mysql //for mysql environment
+
+npm install mongodb  // Mongodb environment
+
+npm i express morgan nodemon ejs body-parser dotenv mongoose axios // all package
