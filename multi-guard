@@ -22,8 +22,9 @@ Step 2: Adding Admin Auth Routes.
 
 admin.php
 
-Route::group(['prefix' => 'admin'], function () {
+<?php
 
+Route::group(['prefix' => 'admin'], function () {
     Route::get('login', [AdminController::class, 'showLoginForm'])->name('admin.login');
     Route::post('login', [AdminController::class, 'login'])->name('admin.login.post');
     Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
@@ -33,7 +34,6 @@ Route::group(['prefix' => 'admin'], function () {
             return view('employee.dashboard');
         })->name('employeee.dashboard');
     });
-
 });
 
 in web route ===
