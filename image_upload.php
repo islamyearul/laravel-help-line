@@ -1,7 +1,7 @@
 use Intervention\Image\Facades\Image;
 
 //Image Intervension for image resize
-
+'document_file' => 'required|mimes:pdf,jpeg,png,jpg|max:4048|min:111',
 if ($request->hasFile('document_file')) {
             $file = $request->file('document_file');
             $extension = $file->getClientOriginalExtension();
