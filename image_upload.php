@@ -2,6 +2,16 @@ use Intervention\Image\Facades\Image;
 
 //Image Intervension for image resize
 
+if ($request->hasFile('document_file')) {
+            $file = $request->file('document_file');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $destinationPath = public_path('/backend/document/employee');
+            $file->move($destinationPath, $filename);
+            $fileurl = '/backend/document/employee/' . $filename;
+            $EmpDocument->document_file = $fileurl;
+        }
+
 
 <?php 
 $imagepath = $request->file('product_thumbnail');
