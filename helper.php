@@ -61,7 +61,20 @@
         }
 
     }
-=======================================                                     
+=======================================   
+  Laravel all() method modification in Model Class 
+             /**
+    * get all users except specified ones
+    *
+    * @param  array|mixed  $keys
+    * @return array
+    */
+    public static function all($keys = null)
+    {
+        $data = parent::all(); # grep data from parent 
+
+        return $data->except(auth()->id); # except whoever you wanted
+    }
 =======================================                                      
 =======================================   
 =======================================                                     
