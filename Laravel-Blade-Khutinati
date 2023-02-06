@@ -52,6 +52,12 @@ value="{{old('name')}}"
 =====
 require Icon 
 <sup><span class="require_icon"><i class="bi bi-asterisk"></i></span></sup>
+/* New added */
+.require_icon {
+  font-size: 8px;
+  color: rgba(240, 91, 91, 0.786);
+  margin-top: 10px !important;
+}
 
 ==============================
 Show active menu 
