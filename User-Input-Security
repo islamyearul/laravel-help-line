@@ -1,0 +1,6 @@
+1. Always Name, details or any text related data store this way 
+  $websiteInfo->name = trim(strip_tags($request->name));
+  $websiteInfo->details = trim(strip_tags($request->details));
+  
+ 2. Social Url or any url Store is this way 
+    $social_url = filter_var($request->input('social_url'), FILTER_SANITIZE_URL);
