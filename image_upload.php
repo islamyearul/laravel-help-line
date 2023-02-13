@@ -23,10 +23,11 @@ $imagepath = $request->file('product_thumbnail');
 
 
 <!-- update -->
-$oldFile = storage_path().$User->profile_photo_path;
-            if(File::exists($Old_file_path)) {
-                unlink($Old_file_path); //delete from storage
-             }
+ if ($Employee->image) {
+            if (file_exists($Employee->image)) {
+                unlink($Employee->image);
+            }
+        }
 
 
 
