@@ -134,3 +134,36 @@
             });
         });
     </script>
+{{-- Multiple --}}
+$('#glass_price, #frame_price, #others_price, #quantity, #discount_amount, #adjustment_amount, #paid_amount, #due_amount, #received_amount')
+                .on('keypress change keydown keyup', function() {
+                    var glass_price = $('#glass_price').val() ? $('#glass_price').val() : 0;
+                    var frame_price = $('#frame_price').val() ? $('#frame_price').val() : 0;
+                    var others_price = $('#others_price').val() ? $('#others_price').val() : 0;
+                    var Itemsum = $('#Item_total_price').val() ? $('#Item_total_price').val() : 0;
+                    var total_price = parseInt(glass_price) + parseInt(frame_price) + parseInt(others_price);
+                    var quantity = $('#quantity').val() ? $('#quantity').val() : 1;
+                    var total_amount = (total_price * quantity) + parseInt(Itemsum);
+                    $('#total_amount').val(total_amount);
+                    var total_amount = $('#total_amount').val() ? $('#total_amount').val() : 0;
+                    var due_amount = $('#due_amount').val() ? $('#due_amount').val() : 0;
+                    var discount = $('#discount_amount').val() ? $('#discount_amount').val() : 0;
+                    var adjustment = $('#adjustment_amount').val() ? $('#adjustment_amount').val() : 0;
+                    var payable = parseInt(total_amount) - (parseInt(adjustment) + parseInt(discount));
+                    $('#payable_amount').val(payable);
+                    var received_amount = $('#received_amount').val() ? $('#received_amount').val() : 0;
+                    var changeTaka = parseInt(received_amount) - parseInt(payable);
+                    if (changeTaka > 0) {
+                        var payAm = parseInt(received_amount) - parseInt(changeTaka);
+                        $('#paid_amount').val(payAm);
+                        $('#changed_amount').val(changeTaka);
+                    } else {
+                        $('#paid_amount').val(received_amount);
+                        $('#changed_amount').val(0);
+                    }
+                    var paid_amount = $('#paid_amount').val() ? $('#paid_amount').val() : 0;
+                    var due_amount = parseInt(total_amount) - (parseInt(paid_amount) + parseInt(discount) +
+                        parseInt(adjustment));
+                    $('#due_amount').val(due_amount);
+                });
+
