@@ -63,3 +63,7 @@ require Icon
 ==============================
 Show active menu 
 {{ Route::is('order.index') || Route::is('order.create') || Route::is('order.edit') ? 'active' : '' }}
+=======================
+Blade Text Limitation
+{{ \Illuminate\Support\Str::limit($fullText, 100, $end='...') }}
+=======================
