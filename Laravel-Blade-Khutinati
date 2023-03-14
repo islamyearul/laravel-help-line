@@ -1,8 +1,8 @@
 Date Formate---
-{{ date('d-m-Y', strtotime($TransactionReport->transaction_date));}}
+{{ date('d-M-Y', strtotime($TransactionReport->transaction_date));}}
   @php                
                         $time = strtotime($SomityPost->datet);
-                        $month = date('M', $time);
+                        $month = date('M', $time);  //3Char month name like Jan
                         $month = date('F', $time);  //ful month name like january
                         $date = date('d', $time);   // get day as 1 to 31
                         $year = date('Y', $time);
