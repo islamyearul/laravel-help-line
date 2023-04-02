@@ -1,0 +1,3 @@
+Replace String
+UPDATE `wp-posts` SET `post-content` = REPLACE(`post-content`, "http://oldurl.com", "http://newurl.com");
+===============
