@@ -15,4 +15,5 @@ git reset --soft HEAD~2  2 for last 2 commit
 ===============================
 Version release tag
 git tag -a v0.1.0 -m "Release v0.1.0"
+git push --follow-tags
 ========================
