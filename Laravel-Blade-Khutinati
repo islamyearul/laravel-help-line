@@ -67,3 +67,15 @@ Show active menu
 Blade Text Limitation
 {{ \Illuminate\Support\Str::limit($fullText, 100, $end='...') }}
 =======================
+
+ {{-- All error show --}}
+  @if ($errors->any())
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+ <ul class="p-0 m-0" style="list-style: none;">
+    @foreach ($errors->all() as $error)
+       <li><i class="mdi mdi-alert-circle"></i>{{ $error }}</li>
+       @endforeach
+   </ul>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+ @endif
