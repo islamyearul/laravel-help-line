@@ -62,3 +62,36 @@ cdn
          });
      
    </script>
+
+===================
+ <script type="text/javascript">
+        $('#receive_amount').on('blur', function() {
+            var form = $(this).closest("form");
+            var total_premium = $('#total_premium').val();
+            var receive_amount = $('#receive_amount').val();
+            if (receive_amount < total_premium) {
+                swal.fire({
+                    title: "Are you sure?",
+                    text: "You input less amount than total premium!",
+                    icon: "warning",
+                    showCancelButton: !0,
+                    confirmButtonText: "Yes, I Submit it!",
+                    cancelButtonText: "No, cancel!",
+                    confirmButtonClass: "btn btn-success mt-2",
+                    cancelButtonClass: "btn btn-danger ms-2 mt-2",
+                    buttonsStyling: !1,
+                }).then(function(t) {
+                    if (t.value) {
+                        form.submit();
+                    } else {
+                        t.dismiss === swal.DismissReason.cancel && swal.fire({
+                            title: "Cancelled",
+                            text: "Your imaginary file is safe :)",
+                            icon: "error",
+                            confirmButtonClass: "btn btn-success",
+                        });
+                    }
+                });
+            }
+        });
+    </script>
