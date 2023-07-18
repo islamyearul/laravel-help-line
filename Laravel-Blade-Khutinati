@@ -12,6 +12,7 @@ Date Formate---
 Long text in Short {{ Str::limit($your_string, 50) }}
 </p>
 
+Get age = date_diff(date_create($data->dob), date_create('today'))->y;
 
 Get current Year in Blade  {{ now()->year }}
 
