@@ -1,3 +1,8 @@
+// image show \
+ <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('assets/images/logo.png'))) }}"
+                                            style="width:100px; height:100px;">
+
+
 @extends('backend/layouts/master')
 @section('content')
 
