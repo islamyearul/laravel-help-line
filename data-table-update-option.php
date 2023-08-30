@@ -91,3 +91,128 @@ Dynamic table data-table example
                             console.log('Handling DataTable issue of Table ' + tableId);
                         };
                     }
+========================
+Button Customize
+
+var table33 =  $('#example333').DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    ['10 rows', '25 rows', '50 rows', 'Show all']
+                ],
+                ajax: {
+                    url: "{{ url('editor/admin_get_parcel_data') }}" + '/' + parcelSlug,
+                    data: {
+
+                    }
+                },
+                scrollX: true,
+
+                dom: 'Bfrtip',
+                buttons: [
+                    'pageLength',
+                    {
+                        extend: 'copy',
+                        text: 'Copy',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+                            rows: function(idx, data, node) {
+                                let found = false;
+                                let selectedRowIndexes = table33.rows('.selected').indexes();
+                                for (let index = 0; index < selectedRowIndexes.length; index++) {
+                                    if (idx == selectedRowIndexes[index]) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                return found;
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+                            rows: function(idx, data, node) {
+                                let found = false;
+                                let selectedRowIndexes = table33.rows('.selected').indexes();
+                                for (let index = 0; index < selectedRowIndexes.length; index++) {
+                                    if (idx == selectedRowIndexes[index]) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                return found;
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'D_Man',
+                        exportOptions: {
+                            columns: [1, 3, 4, 5, 7, 8, 10, 14],
+                            rows: function(idx, data, node) {
+                                let found = false;
+                                let selectedRowIndexes = table33.rows('.selected').indexes();
+                                for (let index = 0; index < selectedRowIndexes.length; index++) {
+                                    if (idx == selectedRowIndexes[index]) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                return found;
+                            }
+                        }
+                    },
+
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                            rows: function(idx, data, node) {
+                                let found = false;
+                                let selectedRowIndexes = table33.rows('.selected').indexes();
+                                for (let index = 0; index < selectedRowIndexes.length; index++) {
+                                    if (idx == selectedRowIndexes[index]) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                return found;
+                            }
+                        }
+                    },
+
+                    {
+                        extend: 'print',
+                        text: 'Print all',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                            rows: function(idx, data, node) {
+                                let found = true;
+                                let selectedRowIndexes = table33.rows('.selected').indexes();
+                                for (let index = 0; index < selectedRowIndexes.length; index++) {
+                                    if (idx == selectedRowIndexes[index]) {
+                                        found = false;
+                                        break;
+                                    }
+                                }
+                                return found;
+                            }
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                    },
+
+                ],
+                createdRow: function(row, data, dataIndex) {
+                    // Add your desired class to each <tr> element
+                    $(row).addClass('data_all_trs');
+                }
+
+            });
