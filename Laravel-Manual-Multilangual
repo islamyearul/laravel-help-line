@@ -1,0 +1,110 @@
+1/ create 2 middleware
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+
+class LanguageManager
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        if (session()->has('locale')) {
+            App::setLocale(session()->get('locale'));
+        }
+
+        return $next($request);
+    }
+}
+====================
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+
+class SetLocale
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+
+        $locale = session('locale', config('app.locale'));
+        App::setLocale($locale);
+
+        return $next($request);
+    }
+}
+==================
+2/ register to karnel
+  protected $middleware = [
+        \App\Http\Middleware\SetLocale::class,
+    ];
+
+    /**
+     * The application's route middleware groups.
+     *
+     * @var array<string, array<int, class-string|string>>
+     */
+    protected $middlewareGroups = [
+        'web' => [
+            \App\Http\Middleware\LanguageManager::class,
+        ],
+
+
+    ];
+============================
+3/ create Route
+Route::get('/setlocale/{locale}', [LandingPageController::class, 'setLocale'])->name('setlocale');
+==============
+4/ Controller
+
+    public function setLocale(Request $request, $locale)
+    {
+        App::setLocale($locale);
+        session()->put('locale', $locale);
+
+        return back();
+    }
+=============
+5/ change language 
+  <div style="text-align: right;">
+                <form id="language-form" action="{{ route('setlocale', ['locale' => '__locale__']) }}" method="GET">
+                    @csrf
+                    <select name="locale" onchange="changeLocale(this.value)">
+                        <option value="en" @if (app()->getLocale() == 'en') selected @endif>🇺🇸 English
+                        </option>
+                        <option value="fr" @if (app()->getLocale() == 'fr') selected @endif>🇫🇷 French
+                        </option>
+                        <option value="es" @if (app()->getLocale() == 'es') selected @endif>🇪🇸 Spanish
+                        </option>
+                    </select>
+                </form>
+            </div>
+=========================
+6/ form submit js
+
+
+function changeLocale(locale) {
+    var form = document.getElementById("language-form");
+    form.action = form.action.replace("__locale__", locale);
+    form.submit();
+}
+
