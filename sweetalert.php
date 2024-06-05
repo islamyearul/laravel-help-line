@@ -38,10 +38,11 @@
 <!-- New system Edited by Yearul -->
 {{-- Sweet Alert  --}}
 
-cdn
+cdn this cdn for old j query version
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-    <script type="text/javascript">
+// for j query 3 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>   
+<script type="text/javascript">
  
         $('.show_confirm').click(function(event) {
              var form =  $(this).closest("form");
