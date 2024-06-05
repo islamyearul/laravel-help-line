@@ -1,0 +1,133 @@
+// function
+public function getLeadsData(Request $request, $slug)
+    {
+        $start = $request->start ?? 0;
+        $draw = $request->draw ?? 1;
+        $length = $request->length ?? 10;
+        $search = $request->search['value'] ?? '';
+    
+        $query = AmazonSellerLeads::query();
+    
+        // Add search condition
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('seller_name', 'like', "%{$search}%")
+                    ->orWhere('website', 'like', "%{$search}%")
+                    ->orWhere('amazon_store_url', 'like', "%{$search}%")
+                    ->orWhere('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('title', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('person_linkedin', 'like', "%{$search}%")
+                    ->orWhere('company_country', 'like', "%{$search}%")
+                    ->orWhere('company_phone', 'like', "%{$search}%")
+                    ->orWhere('annual_revenue', 'like', "%{$search}%")
+                    ->orWhere('categories', 'like', "%{$search}%");
+            });
+        }
+    
+        $count = $query->count();
+        $alldatas = $query->orderBy('id', 'DESC')->offset($start)->limit($length)->get();
+    
+        $data = [
+            'draw' => $draw,
+            'recordsTotal' => AmazonSellerLeads::count(),
+            'recordsFiltered' => $count,
+            'data' => [],
+        ];
+    
+        foreach ($alldatas as $key => $value) {
+            $status = $value->status == 1 ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
+            $datavalue = [
+                $key + 1,
+                $value->seller_name,
+                $value->website,
+                $value->amazon_store_url,
+                $value->first_name,
+                $value->last_name,
+                $value->title,
+                $value->email,
+                $value->person_linkedin,
+                $value->company_country,
+                $value->company_phone,
+                $value->annual_revenue,
+                $value->categories,
+                $status,
+                '<a href="' . route('amazon-seller-leads.edit', $value->id) . '" class="btn btn-sm btn-info">Edit</a> 
+                <form action="' . route('amazon-seller-leads.destroy', $value->id) . '" method="POST" class="d-inline"> 
+                    ' . csrf_field() . ' 
+                    ' . method_field('DELETE') . ' 
+                    <button type="submit" class="btn btn-danger btn-sm show_confirm">Delete</button> 
+                </form>',
+            ];
+            array_push($data['data'], $datavalue);
+        }
+    
+        return response()->json($data);
+    }
+
+
+/// script
+
+<script>
+        $(document).ready(function(event) {
+            var slug = 'amazon';
+            new DataTable('#datatablenewd', {
+                ajax: {
+                    url: "{{ url('admin/getleadsdata') }}" + '/' + slug,
+                    data: {
+
+                    }
+                },
+                processing: true,
+                serverSide: true,
+                searching: true,
+            });
+            // var table33 = $('#datatablenewd').DataTable({
+            //     processing: true,
+            //     serverSide: true,
+            //     searching: true,
+            //     sorting: false,
+            //     responsive: true,
+            //     lengthMenu: [
+            //         [10, 25, 50, -1],
+            //         ['10 rows', '25 rows', '50 rows', 'Show all']
+            //     ],
+            //     ajax: {
+            //         url: "{{ url('admin/getleadsdata') }}" + '/' + slug,
+            //         data: {
+
+            //         }
+            //     },
+
+            //     dom: 'Bfrtip',
+
+            // });
+        });
+    </script>
+
+// table
+<div class="table-responsive">
+                                <table id="datatablenewd" class="table-bordered" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>SL</th>
+                                            <th>Seller Name</th>
+                                            <th>Website</th>
+                                            <th>Amazon Store Url</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Title</th>
+                                            <th>Email</th>
+                                            <th>Person Linkedin</th>
+                                            <th>Company Country</th>
+                                            <th>Company Phone</th>
+                                            <th>Annual Revenue</th>
+                                            <th>Categories</th>
+                                            <th> Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
